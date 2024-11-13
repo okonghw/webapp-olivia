@@ -164,3 +164,6 @@ Represents both notifications and journal entries, depending on the activity typ
 - addMedia(media: MediaItem) - Associates multimedia content if the activity is a journal entry.
 - getSummary() - Returns a summary of the activity, including content, timestamp, and type.
 - deleteActivity() - Deletes or archives the activity from the user’s view.
+
+## Figma
+https://www.figma.com/board/g0vfQXkNM0AuoYiKwIIh6A/Compsci-Nook-and-Story?node-id=0-1&node-type=canvas
