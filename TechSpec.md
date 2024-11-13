@@ -33,17 +33,18 @@ Manages the state of the app, including user sessions, room navigation, and glob
 - activeRoom: Room - The current room that the user is in.
 - friendList: List<User> - List of friends the user can interact with.
 - isAppPaused: boolean - Indicates if the app is paused.
-- notificationQueue: List<Notification> - Queue for new notifications/messages.
+- notificationQueue: List<UserActivity> - Queue for new notifications/messages.
 - rooms: List<Room> - List of rooms available for the user.
 * Methods
 - initializeApp: Sets up the app with default settings, loads user data, and initializes rooms.
 navigateToRoom: Switches the current room based on user selection.
 - pauseApp: Pauses interactions within the app.
 - resumeApp: Resumes app functionality after pausing.
-- sendNotification: Queues notifications for new messages, updates, or events.
+- sendNotification(activity: UserActivity): Queues notifications for new messages, updates, or events.
 - loadFriendList: Loads the friend list and their interaction statuses.
 
 2. Room
+
 Represents each "nook" or room in the app, managing layout, customization, and access control.
 
 * Variables
@@ -63,15 +64,15 @@ Represents each "nook" or room in the app, managing layout, customization, and a
 - resetRoom: Resets the room to its default layout and decor.
 
 3. User
+
 Represents each user in the app, including personal details and friendships.
 
 *  Variables
 - userID: int - Unique identifier for the user.
 - username: String - User’s display name.
-- profilePicture: Image - User’s profile image.
 - friendshipLevel: FriendshipLevel - The level of friendship for each friend.
 - personalRooms: List<Room> - Rooms that belong to the user.
-- journalEntries: List<JournalEntry> - Entries the user has created in their bookshelf.
+- journalEntries: List<UserActivity> - Entries the user has created in their bookshelf.
 * Methods
 - sendFriendRequest: Sends a friend request to another user.
 - acceptFriendRequest: Accepts a friend request from another user.
@@ -80,6 +81,7 @@ Represents each user in the app, including personal details and friendships.
 - setFriendshipLevel: Sets friendship permissions for a friend.
 
 4. DecorItem
+
 Represents a customizable item within a room, such as furniture, plants, or wall art.
 
 * Variables
@@ -95,6 +97,7 @@ Represents a customizable item within a room, such as furniture, plants, or wall
 - resetPosition: Resets the item to its original position.
 
 5. MediaItem
+
 Represents multimedia content (videos, music) that can be shared and played within rooms.
 
 * Variables
@@ -110,6 +113,7 @@ Represents multimedia content (videos, music) that can be shared and played with
 - reset: Resets the media to the beginning.
 
 6. InteractiveElement (Base Class)
+
 A base class for interactive components in each room, such as the Bulletin Board, Bookshelf, or Creative Canvas.
 
 * Variables
@@ -118,31 +122,45 @@ A base class for interactive components in each room, such as the Bulletin Board
 * Methods
 - interact: Defines generic interaction behavior for the element.
 - display: Renders the element in the room.
-- BulletinBoard (Extends InteractiveElement)
+
+7. BulletinBoard (Extends InteractiveElement)
 * Variables
 - posts: List<Post> - List of posts pinned to the board.
 * Methods
 - addPost: Adds a post to the bulletin board.
 - removePost: Removes a post from the bulletin board.
 - reactToPost: Adds a reaction to a post.
-- Bookshelf (Extends InteractiveElement)
+
+8. Bookshelf (Extends InteractiveElement)
 * Variables
-- entries: List<JournalEntry> - Collection of journal entries stored by the user.
+- entries: List<UserActivity> - Collection of journal entries stored by the user.
 * Methods
 - addJournalEntry: Adds an entry to the bookshelf.
 - removeJournalEntry: Removes an entry from the bookshelf.
 
-7. Post
+9. Post
+
 Represents a post on the Bulletin Board, containing content and reactions.
 
 * Variables
 - postID: int - Unique identifier for the post.
 - content: String - The text or media of the post.
 - author: User - The user who created the post.
-- reactions: List<Reaction> - List of reactions to the post.
+
+10. UserActivity
+
+Represents both notifications and journal entries, depending on the activity type.
+
+* Variables
+- activityID: int - Unique identifier for each activity.
+- content: String - The message, description, or entry text.
+- type: String - Defines the activity type (e.g., "Notification", "JournalEntry").
+- timestamp: Date - The time when the activity was created.
+- isRead: boolean - For notifications, indicates if the activity has been viewed by the user.
+
+
 * Methods
-- addReaction: Adds a reaction to the post.
-- removeReaction: Removes a reaction from the post.
-
-
-
+- markAsRead() - Marks the activity as read if it is a notification.
+- addMedia(media: MediaItem) - Associates multimedia content if the activity is a journal entry.
+- getSummary() - Returns a summary of the activity, including content, timestamp, and type.
+- deleteActivity() - Deletes or archives the activity from the user’s view.
