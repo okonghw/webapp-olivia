@@ -21,45 +21,35 @@ const RoomsMenu = ({ house, onSettingsOpen }) => {
   };
 
   return (
-    <div 
-      className="rooms-menu min-h-screen flex flex-col" 
-      style={{ backgroundColor: house.primaryColor + '20' }}
-    >
-      <div className="flex justify-between p-4">
-        <h1 className="text-2xl font-bold">{house.name}</h1>
-        <button 
-          onClick={onSettingsOpen}
-          className="bubble-btn"
-        >
-          <Settings />
+    <div className="rooms-menu">
+      <header className="header">
+        <h1>{house.name}</h1>
+        <button className="settings-button" onClick={onSettingsOpen}>
+          <Settings size={24} />
         </button>
-      </div>
+      </header>
 
-      <div className="flex-grow flex justify-center items-center">
-        <div 
-          className={`room ${activeRoom.type} w-3/4 h-96 rounded-lg shadow-lg`}
-        >
-          <h2 className="text-center text-xl p-4">{activeRoom.name}</h2>
+      <main className="room-display">
+        <div className="room">
+          <h2 className="text-2xl font-medium">{activeRoom.name}</h2>
         </div>
-      </div>
+      </main>
 
-      <div className="room-navigation flex justify-center gap-4 p-4">
+      <nav className="room-navigation">
         {rooms.map((room) => (
-          <button 
+          <button
             key={room.id}
             onClick={() => setActiveRoom(room)}
-            className={`bubble-btn ${activeRoom.id === room.id ? 'opacity-100' : 'opacity-50'}`}
+            className={`room-button ${activeRoom.id === room.id ? 'active' : ''}`}
           >
             {room.name}
           </button>
         ))}
-        <button 
-          onClick={handleAddRoom}
-          className="bubble-btn flex items-center gap-2"
-        >
-          <Plus /> Add Room
+        <button onClick={handleAddRoom} className="add-room-button">
+          <Plus size={20} />
+          Add Room
         </button>
-      </div>
+      </nav>
     </div>
   );
 };
