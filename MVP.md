@@ -7,14 +7,13 @@
   - `activeRoom`: Room navigation functionality
   - `initializeApp`: Setting up default settings
   - `navigateToRoom`: Room-switching feature
-  - `pauseApp` and `resumeApp`: Control app pausing/resuming
+  - `addRoom`: Add new room functionality
 - Implement `Room`:
   - `roomID`: Room identification
   - `loadRoom`: Load room layout and elements
 
 ## Day 3-4 (Essential Features)
-- Continue work on `AppManager`:
-  - `isAppPaused`: Control pausing functionality
+- Continue work on `AppManager`
 - Implement `User`:
   - `userID`: User identity management
   - `username`: User profile setup

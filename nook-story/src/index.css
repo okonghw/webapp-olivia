@@ -123,7 +123,7 @@ body {
   border-top: 1px solid #eee;
 }
 
-/.rooms-list {
+.rooms-list {
   display: flex;
   gap: 1rem;
 }
