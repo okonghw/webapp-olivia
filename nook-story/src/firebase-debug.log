@@ -1,0 +1,41 @@
+[debug] [2024-12-04T16:41:57.382Z] ----------------------------------------------------------------------
+[debug] [2024-12-04T16:41:57.386Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2024-12-04T16:41:57.386Z] CLI Version:   13.22.1
+[debug] [2024-12-04T16:41:57.386Z] Platform:      linux
+[debug] [2024-12-04T16:41:57.387Z] Node Version:  v20.18.0
+[debug] [2024-12-04T16:41:57.387Z] Time:          Wed Dec 04 2024 08:41:57 GMT-0800 (Pacific Standard Time)
+[debug] [2024-12-04T16:41:57.387Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-04T16:41:57.391Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-12-04T16:41:57.567Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-04T16:41:57.568Z] > authorizing via signed-in user (roboticdude2000@gmail.com)
+[debug] [2024-12-04T16:41:57.568Z] [iam] checking project webapp2024-e72b1 for permissions ["firebase.projects.get"]
+[debug] [2024-12-04T16:41:57.570Z] Checked if tokens are valid: false, expires at: 1733176575706
+[debug] [2024-12-04T16:41:57.571Z] Checked if tokens are valid: false, expires at: 1733176575706
+[debug] [2024-12-04T16:41:57.571Z] > refreshing access token with scopes: []
+[debug] [2024-12-04T16:41:57.578Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-12-04T16:41:57.578Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-12-04T16:41:57.914Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-12-04T16:41:57.916Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-12-04T16:41:57.937Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/webapp2024-e72b1:testIamPermissions [none]
+[debug] [2024-12-04T16:41:57.937Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/webapp2024-e72b1:testIamPermissions x-goog-quota-user=projects/webapp2024-e72b1
+[debug] [2024-12-04T16:41:57.937Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/webapp2024-e72b1:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-12-04T16:41:57.955Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-12-04T16:41:57.955Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-12-04T16:41:58.177Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/webapp2024-e72b1:testIamPermissions 200
+[debug] [2024-12-04T16:41:58.178Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/webapp2024-e72b1:testIamPermissions {}
+[debug] [2024-12-04T16:41:58.178Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project webapp2024-e72b1:
+
+  firebase.projects.get
+[debug] [2024-12-04T16:41:58.179Z] Checked if tokens are valid: true, expires at: 1733334116917
+[debug] [2024-12-04T16:41:58.179Z] Checked if tokens are valid: true, expires at: 1733334116917
+[debug] [2024-12-04T16:41:58.179Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/webapp2024-e72b1 [none]
+[debug] [2024-12-04T16:41:58.375Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/webapp2024-e72b1 403
+[debug] [2024-12-04T16:41:58.376Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/webapp2024-e72b1 {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2024-12-04T16:41:58.377Z] HTTP Error: 403, The caller does not have permission
+[debug] [2024-12-04T16:41:58.387Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at responseToError (/usr/local/lib/node_modules/firebase-tools/lib/responseToError.js:49:12)
+    at RetryOperation._fn (/usr/local/lib/node_modules/firebase-tools/lib/apiv2.js:312:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to get Firebase project webapp2024-e72b1. Please make sure the project exists and your account has permission to access it.
