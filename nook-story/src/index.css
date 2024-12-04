@@ -240,3 +240,16 @@ body {
 .settings-button:hover {
   color: #5848b5;
 }
+
+/* Add these styles to center the image on the screen */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensures the image is vertically centered on the screen */
+}
+
+.centered-image {
+  max-width: 80%; /* Adjust the size of the image */
+  height: auto;
+}

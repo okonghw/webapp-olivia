@@ -13,23 +13,18 @@
 
 # Architecture
 
-## 1. AppManager (P0)
+## 1. AppManager (P0)  
 Manages the state of the app, including user sessions, room navigation, and global settings.
 
 ### Variables:
-- `currentUser`: User (P0) - Core for user interactions.
-- `activeRoom`: Room (P0) - Necessary for room navigation.
-- `friendList`: List<User> (P1) - Adds value for social interaction.
-- `isAppPaused`: boolean (P0) - Core functionality for app control.
-- `notificationQueue`: List<UserActivity> (P1) - Important for real-time notifications.
-- `rooms`: List<Room> (P0) - Essential for room-based navigation.
+- `currentScreen`: `string` (P0) Tracks the current screen the user is viewing (either 'nookhouse' or 'rooms').
+- `nookHouses`: `List<Room>` (P0) Holds the list of NookHouses fetched from `localStorage`. This is essential for navigating between NookHouses.
+- `selectedHouse`: `Room | null` (P0) The currently selected NookHouse. Used to display rooms when navigating to the room view.
 
 ### Methods:
-- `initializeApp`: Sets up the app with default settings (P0).
-- `navigateToRoom`: Allows users to switch between rooms (P0).
-- `pauseApp`: Pauses interactions (P0).
-- `resumeApp`: Resumes app (P0).
-- `sendNotification(activity: UserActivity)`: Queues notifications (P1).
+- `initializeApp`: (P0) Sets up the app by loading saved houses from `localStorage` on initial render.
+- `createNewNookHouse`: (P1) Creates a new NookHouse with default settings, saves it to `localStorage`, updates the state, and automatically selects the new house to navigate to the room view.
+- `navigateToRoom`: (P0) Selects a NookHouse and navigates to the 'rooms' screen.
 
 ## 2. Room (P0)
 Represents each "nook" or room, managing layout, customization, and access control.
@@ -48,6 +43,7 @@ Represents each "nook" or room, managing layout, customization, and access contr
 - `setAccessLevel`: Sets permissions (P1).
 - `playMedia`: Initiates media playback (P1).
 - `stopMedia`: Stops playback (P1).
+- `addRoom`: Adds new room.
 
 ## 3. User (P0)
 Represents users, personal details, and friendships.
