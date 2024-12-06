@@ -19,11 +19,11 @@ export const UserProvider = ({ children }) => {
     // Load user data from localStorage on mount
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser));
-    }
-    const savedFriends = localStorage.getItem('friends');
-    if (savedFriends) {
-      setFriends(JSON.parse(savedFriends));
+      const user = JSON.parse(savedUser);
+      setCurrentUser(user);
+      // Load friends list specific to this user
+      const userFriends = JSON.parse(localStorage.getItem(`friends_${user.id}`) || '[]');
+      setFriends(userFriends);
     }
   }, []);
 
@@ -46,23 +46,33 @@ export const UserProvider = ({ children }) => {
     
     setCurrentUser(user);
     localStorage.setItem('currentUser', JSON.stringify(user));
+    
+    // Load this user's friends list
+    const userFriends = JSON.parse(localStorage.getItem(`friends_${user.id}`) || '[]');
+    setFriends(userFriends);
   };
 
   const logout = () => {
     setCurrentUser(null);
+    setFriends([]); // Clear friends list from state
     localStorage.removeItem('currentUser');
   };
 
   const addFriend = (friendUsername, level = FRIEND_LEVELS.VISITOR) => {
+    if (!currentUser) return; // Guard clause
+
     const newFriend = {
       id: Date.now().toString(),
       username: friendUsername,
       friendLevel: level,
       addedAt: new Date().toISOString(),
     };
+    
     const updatedFriends = [...friends, newFriend];
     setFriends(updatedFriends);
-    localStorage.setItem('friends', JSON.stringify(updatedFriends));
+    
+    // Store friends list specific to current user
+    localStorage.setItem(`friends_${currentUser.id}`, JSON.stringify(updatedFriends));
   };
 
   return (

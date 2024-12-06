@@ -3,6 +3,7 @@ import { House, Plus } from 'lucide-react';
 import Room from './Room';
 import { useUser } from './UserContext';
 import LoginModal from './LoginModal';
+import FriendsList from './FriendsList';
 
 const AppManager = () => {
   const { currentUser } = useUser();
@@ -44,7 +45,10 @@ const AppManager = () => {
       {showLogin && <LoginModal onComplete={() => setShowLogin(false)} />}
 
       {!showLogin && currentScreen === 'nookhouse' && (
-        <div className="nookhouse-menu p-6 bg-purple-600 min-h-screen flex flex-col justify-center items-center">
+        <div className="nookhouse-menu p-6 bg-purple-600 min-h-screen flex flex-col justify-center items-center relative">
+        <div className="absolute top-4 right-4">
+          <FriendsList />
+        </div>
           <h1 className="text-4xl font-bold text-white mb-8">Welcome to Nook&Story, {currentUser?.username}!</h1>
 
           {nookHouses.length === 0 ? (
@@ -83,6 +87,7 @@ const AppManager = () => {
           )}
         </div>
       )}
+
 
       {!showLogin && currentScreen === 'rooms' && selectedHouse && (
         <Room
