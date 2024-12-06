@@ -1,64 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { Settings, Plus, Play, Image, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Settings, Plus, Play, Image, X, ArrowLeft } from 'lucide-react';
 import { useUser } from './UserContext';
 
-// Access level constants
+// Access level constants to manage room visibility
 const ACCESS_LEVELS = {
   PUBLIC: 'Public',
   PRIVATE: 'Private',
   FRIENDS_ONLY: 'Friends Only',
 };
 
-const Room = ({ house }) => {
-  const { currentUser, FRIEND_LEVELS } = useUser();
-  
-  // All state variables
+const Room = ({ house, onBackToMenu }) => {
+  // Variables
   const [rooms, setRooms] = useState([
     { roomID: 'living-room', roomType: 'living-room', name: 'Living Room', accessLevel: ACCESS_LEVELS.PUBLIC },
     { roomID: 'study-room', roomType: 'study-room', name: 'Study Room', accessLevel: ACCESS_LEVELS.PUBLIC },
     { roomID: 'gaming-room', roomType: 'gaming-room', name: 'Gaming Room', accessLevel: ACCESS_LEVELS.PUBLIC },
     { roomID: 'personal-room', roomType: 'personal-room', name: 'Personal Room', accessLevel: ACCESS_LEVELS.PRIVATE },
   ]);
-  const [activeRoom, setActiveRoom] = useState(rooms[0]);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [primaryColor, setPrimaryColor] = useState(house.primaryColor);
-  const [accessLevel, setAccessLevelState] = useState(house.accessLevel || ACCESS_LEVELS.PUBLIC);
-  const [canEdit, setCanEdit] = useState(false);
 
-  // Check user permissions whenever active room or user changes
-  useEffect(() => {
-    const checkPermissions = () => {
-      if (!currentUser) return false;
-      
-      // If user is the house owner, they have full permissions
-      if (house.ownerId === currentUser.id) return true;
+  // State variables for room settings
+  const [activeRoom, setActiveRoom] = useState(rooms[0]); // Room currently being viewed
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // Whether the settings modal is open
+  const [showAccessDenied, setShowAccessDenied] = useState(false); // New state for access denied modal
 
-      switch (currentUser.friendLevel) {
-        case FRIEND_LEVELS.OWNER:
-        case FRIEND_LEVELS.BEST_FRIEND:
-          return true;
-        case FRIEND_LEVELS.FRIEND:
-          return activeRoom.accessLevel !== ACCESS_LEVELS.PRIVATE;
-        case FRIEND_LEVELS.ROOMMATE:
-          return activeRoom.accessLevel === ACCESS_LEVELS.PUBLIC;
-        case FRIEND_LEVELS.VISITOR:
-        default:
-          return false;
-      }
-    };
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(house.name);
+  const { currentUser } = useUser();
 
-    setCanEdit(checkPermissions());
-  }, [currentUser, activeRoom, house.ownerId, FRIEND_LEVELS]);
+  // Room customization variables
+  const [primaryColor, setPrimaryColor] = useState(house.primaryColor); // Room color setting
+  const [accessLevel, setAccessLevelState] = useState(house.accessLevel || ACCESS_LEVELS.PUBLIC); // Access control
 
-  // Room management methods
+  // Methods:
+  // Load the layout and elements of the selected room
   const loadRoom = (roomID) => {
     const room = rooms.find(r => r.roomID === roomID);
+    // Simple access check - deny access to private rooms
+    if (room.accessLevel === ACCESS_LEVELS.PRIVATE) {
+      setShowAccessDenied(true);
+      setTimeout(() => setShowAccessDenied(false), 3000);
+      return;
+    }
     setActiveRoom(room);
   };
 
+  // Handle back button click
+  const handleBack = () => {
+    onBackToMenu();  // Call the callback instead of direct navigation
+  };
+
+  const handleNameUpdate = () => {
+    if (editedName.trim()) {
+      const houses = JSON.parse(localStorage.getItem('nookHouses') || '[]');
+      const updatedHouses = houses.map(h =>
+        h.id === house.id ? { ...h, name: editedName.trim() } : h
+      );
+      localStorage.setItem('nookHouses', JSON.stringify(updatedHouses));
+      setIsEditing(false);
+    }
+  };
+
+  // Adds a new decor item to the room (not yet implemented)
+  const addDecorItem = (decorItem) => {
+    console.log(`Added decor item: ${decorItem}`);
+  };
+
+  // Sets the room's access level (Public, Private, Friends Only)
+  const setAccessLevel = (level) => {
+    setAccessLevelState(level);
+  };
+
+  // Initiates media playback (e.g., for music, video)
+  const playMedia = (mediaItem) => {
+    console.log(`Playing media: ${mediaItem}`);
+  };
+
+  // Stops media playback
+  const stopMedia = () => {
+    console.log('Stopping media playback');
+  };
+
+  // Handle adding a new room to the house
   const addRoom = () => {
-    if (!canEdit) return;
-    
     const newRoom = {
       roomID: `room-${Date.now()}`,
       roomType: 'custom-room',
@@ -68,24 +91,8 @@ const Room = ({ house }) => {
     setRooms([...rooms, newRoom]);
   };
 
-  // Media and decor methods
-  const addDecorItem = (decorItem) => {
-    if (!canEdit) return;
-    console.log(`Added decor item: ${decorItem}`);
-  };
-
-  const playMedia = (mediaItem) => {
-    console.log(`Playing media: ${mediaItem}`);
-  };
-
-  const stopMedia = () => {
-    console.log('Stopping media playback');
-  };
-
-  // Settings methods
+  // Save the room settings (color and access level) to localStorage
   const handleSaveSettings = () => {
-    if (!canEdit) return;
-
     const updatedHouse = { ...house, primaryColor, accessLevel };
 
     // Update the house data in localStorage
@@ -94,13 +101,19 @@ const Room = ({ house }) => {
       h.id === house.id ? updatedHouse : h
     );
     localStorage.setItem('nookHouses', JSON.stringify(updatedHouses));
-
     setIsSettingsOpen(false);
   };
 
   return (
     <div className="rooms-menu">
-      {/* Centered Image */}
+      {/* Access Denied Modal */}
+      {showAccessDenied && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+          You don't have permission to access this room
+        </div>
+      )}
+
+      {/* Centered Image (Placeholder) */}
       <div className="image-container">
         <img
           src="placeholderNook.png"
@@ -110,16 +123,48 @@ const Room = ({ house }) => {
       </div>
 
       {/* Top Menu Bar */}
-      <div className="top-menu-bar flex justify-between items-center mt-4">
-        <div className="house-name">{house.name}</div>
-        {canEdit && (
+      <div className="top-menu-bar">
+        <div className="back-button-container">
           <button
-            onClick={() => setIsSettingsOpen(true)}
-            className="settings-button"
+            onClick={handleBack}
+            className="text-purple-600 hover:text-purple-800 transition-colors"
           >
-            <Settings size={20} />
+            <ArrowLeft size={24} />
           </button>
-        )}
+          {isEditing && currentUser?.id === house.ownerId ? (
+            <input
+              type="text"
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
+              onBlur={handleNameUpdate}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleNameUpdate();
+                }
+              }}
+              className="border rounded px-2 py-1 text-lg font-bold"
+              autoFocus
+            />
+          ) : (
+            <div
+              className="house-name"
+              onClick={() => {
+                if (currentUser?.id === house.ownerId) {
+                  setIsEditing(true);
+                }
+              }}
+              style={{ cursor: currentUser?.id === house.ownerId ? 'pointer' : 'default' }}
+            >
+              {editedName}
+            </div>
+          )}
+        </div>
+        <button
+          onClick={() => setIsSettingsOpen(true)}
+          className="settings-button"
+        >
+          <Settings size={20} />
+        </button>
       </div>
 
       {/* Room Title */}
@@ -130,17 +175,15 @@ const Room = ({ house }) => {
         <div className={`room ${activeRoom.roomType}`}></div>
       </div>
 
-      {/* Media and Decor Buttons - Only shown if user has edit permissions */}
-      {canEdit && (
-        <div className="media-decor-buttons">
-          <button onClick={() => playMedia('Media item')}>
-            <Play size={24} />
-          </button>
-          <button onClick={() => addDecorItem('Decor item')}>
-            <Image size={24} />
-          </button>
-        </div>
-      )}
+      {/* Media and Decor Buttons */}
+      <div className="media-decor-buttons">
+        <button onClick={() => playMedia('Media item')}>
+          <Play size={24} />
+        </button>
+        <button onClick={() => addDecorItem('Decor item')}>
+          <Image size={24} />
+        </button>
+      </div>
 
       {/* Room Navigation */}
       <div className="room-navigation">
@@ -155,15 +198,13 @@ const Room = ({ house }) => {
             </button>
           ))}
         </div>
-        {canEdit && (
-          <button onClick={addRoom} className="add-room-button">
-            <Plus size={20} />
-            Add Room
-          </button>
-        )}
+        <button onClick={addRoom} className="add-room-button">
+          <Plus size={20} />
+          Add Room
+        </button>
       </div>
 
-      {/* Settings Modal */}
+      {/* Room Settings Modal */}
       {isSettingsOpen && (
         <div className="modal-overlay">
           <div className="modal-content">

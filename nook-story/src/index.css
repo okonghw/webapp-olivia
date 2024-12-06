@@ -215,17 +215,37 @@ body {
   z-index: 10;
 }
 
+.back-button-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;  /* Adjust spacing between back button and text */
+}
+
 .house-name {
   font-size: 1.5rem;
   font-weight: bold;
   color: #1a1a1a;
-  cursor: default;
   transition: color 0.3s ease;
-  margin-right: auto; /* Ensure the house name stays on the left */
 }
 
-.house-name:hover {
+.house-name[style*="cursor: pointer"]:hover {
   color: #6a5acd;
+}
+
+.house-name::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 2px;
+  background: #6a5acd;
+  transition: width 0.3s ease;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+.house-name[style*="cursor: pointer"]:hover::after {
+  width: 100%;
 }
 
 .settings-button {

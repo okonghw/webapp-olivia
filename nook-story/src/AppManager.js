@@ -10,13 +10,14 @@ const AppManager = () => {
   const [currentScreen, setCurrentScreen] = useState('nookhouse');
   const [nookHouses, setNookHouses] = useState([]);
   const [selectedHouse, setSelectedHouse] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (currentUser) {
       const existingHouses = JSON.parse(localStorage.getItem('nookHouses') || '[]');
       setNookHouses(existingHouses);
     }
-  }, [currentUser]);
+  }, [currentUser, refreshTrigger]);
 
   const createNewNookHouse = () => {
     const newHouse = {
@@ -41,7 +42,7 @@ const AppManager = () => {
   return (
     <div className="app-container">
       {showLogin && <LoginModal onComplete={() => setShowLogin(false)} />}
-      
+
       {!showLogin && currentScreen === 'nookhouse' && (
         <div className="nookhouse-menu p-6 bg-purple-600 min-h-screen flex flex-col justify-center items-center">
           <h1 className="text-4xl font-bold text-white mb-8">Welcome to Nook&Story, {currentUser?.username}!</h1>
@@ -84,7 +85,13 @@ const AppManager = () => {
       )}
 
       {!showLogin && currentScreen === 'rooms' && selectedHouse && (
-        <Room house={selectedHouse} />
+        <Room
+          house={selectedHouse}
+          onBackToMenu={() => {
+            setCurrentScreen('nookhouse');
+            setRefreshTrigger(prev => prev + 1); // Trigger refresh of house list
+          }}
+        />
       )}
     </div>
   );
