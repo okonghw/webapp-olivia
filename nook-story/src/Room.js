@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Settings, Plus, Play, Image, X } from 'lucide-react';
+import { useUser } from './UserContext';
 
-// Access level constants to manage room visibility
+// Access level constants
 const ACCESS_LEVELS = {
   PUBLIC: 'Public',
   PRIVATE: 'Private',
@@ -9,65 +10,82 @@ const ACCESS_LEVELS = {
 };
 
 const Room = ({ house }) => {
-  // Variables
-  const [rooms, setRooms] = useState([
-    { roomID: 'living-room', roomType: 'living-room', name: 'Living Room' },
-    { roomID: 'study-room', roomType: 'study-room', name: 'Study Room' },
-    { roomID: 'gaming-room', roomType: 'gaming-room', name: 'Gaming Room' },
-    { roomID: 'personal-room', roomType: 'personal-room', name: 'Personal Room' },
-  ]);
+  const { currentUser, FRIEND_LEVELS } = useUser();
   
-  // State variables for room settings
-  const [activeRoom, setActiveRoom] = useState(rooms[0]); // Room currently being viewed
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // Whether the settings modal is open
+  // All state variables
+  const [rooms, setRooms] = useState([
+    { roomID: 'living-room', roomType: 'living-room', name: 'Living Room', accessLevel: ACCESS_LEVELS.PUBLIC },
+    { roomID: 'study-room', roomType: 'study-room', name: 'Study Room', accessLevel: ACCESS_LEVELS.PUBLIC },
+    { roomID: 'gaming-room', roomType: 'gaming-room', name: 'Gaming Room', accessLevel: ACCESS_LEVELS.PUBLIC },
+    { roomID: 'personal-room', roomType: 'personal-room', name: 'Personal Room', accessLevel: ACCESS_LEVELS.PRIVATE },
+  ]);
+  const [activeRoom, setActiveRoom] = useState(rooms[0]);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [primaryColor, setPrimaryColor] = useState(house.primaryColor);
+  const [accessLevel, setAccessLevelState] = useState(house.accessLevel || ACCESS_LEVELS.PUBLIC);
+  const [canEdit, setCanEdit] = useState(false);
 
-  // Room customization variables
-  const [primaryColor, setPrimaryColor] = useState(house.primaryColor); // Room color setting
-  const [accessLevel, setAccessLevelState] = useState(house.accessLevel || ACCESS_LEVELS.PUBLIC); // Access control
+  // Check user permissions whenever active room or user changes
+  useEffect(() => {
+    const checkPermissions = () => {
+      if (!currentUser) return false;
+      
+      // If user is the house owner, they have full permissions
+      if (house.ownerId === currentUser.id) return true;
 
-  // Methods:
+      switch (currentUser.friendLevel) {
+        case FRIEND_LEVELS.OWNER:
+        case FRIEND_LEVELS.BEST_FRIEND:
+          return true;
+        case FRIEND_LEVELS.FRIEND:
+          return activeRoom.accessLevel !== ACCESS_LEVELS.PRIVATE;
+        case FRIEND_LEVELS.ROOMMATE:
+          return activeRoom.accessLevel === ACCESS_LEVELS.PUBLIC;
+        case FRIEND_LEVELS.VISITOR:
+        default:
+          return false;
+      }
+    };
 
-  // Load the layout and elements of the selected room
+    setCanEdit(checkPermissions());
+  }, [currentUser, activeRoom, house.ownerId, FRIEND_LEVELS]);
+
+  // Room management methods
   const loadRoom = (roomID) => {
     const room = rooms.find(r => r.roomID === roomID);
-    setActiveRoom(room); // Change the active room to the selected room
+    setActiveRoom(room);
   };
 
-  // Adds a new decor item to the room (not yet implemented)
+  const addRoom = () => {
+    if (!canEdit) return;
+    
+    const newRoom = {
+      roomID: `room-${Date.now()}`,
+      roomType: 'custom-room',
+      name: `New Room ${rooms.length + 1}`,
+      accessLevel: ACCESS_LEVELS.PUBLIC,
+    };
+    setRooms([...rooms, newRoom]);
+  };
+
+  // Media and decor methods
   const addDecorItem = (decorItem) => {
-    // Decor item logic would go here
+    if (!canEdit) return;
     console.log(`Added decor item: ${decorItem}`);
   };
 
-  // Sets the room's access level (Public, Private, Friends Only)
-  const setAccessLevel = (level) => {
-    setAccessLevelState(level); // Updates the room's access level
-  };
-
-  // Initiates media playback (e.g., for music, video)
   const playMedia = (mediaItem) => {
-    // Media playback logic would go here
     console.log(`Playing media: ${mediaItem}`);
   };
 
-  // Stops media playback
   const stopMedia = () => {
-    // Logic to stop the media would go here
     console.log('Stopping media playback');
   };
 
-  // Handle adding a new room to the house
-  const addRoom = () => {
-    const newRoom = {
-      roomID: `room-${Date.now()}`, // Unique ID for the new room
-      roomType: 'custom-room', // Type of room
-      name: `New Room ${rooms.length + 1}`, // Default name for the new room
-    };
-    setRooms([...rooms, newRoom]); // Add the new room to the list of rooms
-  };
-
-  // Save the room settings (color and access level) to localStorage
+  // Settings methods
   const handleSaveSettings = () => {
+    if (!canEdit) return;
+
     const updatedHouse = { ...house, primaryColor, accessLevel };
 
     // Update the house data in localStorage
@@ -77,77 +95,78 @@ const Room = ({ house }) => {
     );
     localStorage.setItem('nookHouses', JSON.stringify(updatedHouses));
 
-    console.log('House updated:', updatedHouse);
-
-    setIsSettingsOpen(false); // Close settings modal
+    setIsSettingsOpen(false);
   };
 
   return (
     <div className="rooms-menu">
-      {/* Centered Image (Placeholder) */}
+      {/* Centered Image */}
       <div className="image-container">
         <img
-          src="placeholderNook.png" // Assuming the image is in the public folder
+          src="placeholderNook.png"
           alt="Placeholder Nook"
           className="centered-image"
         />
       </div>
 
-      {/* Top Menu Bar: Displays the house name and a button to open settings */}
+      {/* Top Menu Bar */}
       <div className="top-menu-bar flex justify-between items-center mt-4">
         <div className="house-name">{house.name}</div>
-        <button
-          onClick={() => setIsSettingsOpen(true)} // Opens settings modal
-          className="settings-button"
-        >
-          <Settings size={20} />
-        </button>
+        {canEdit && (
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="settings-button"
+          >
+            <Settings size={20} />
+          </button>
+        )}
       </div>
 
-      {/* Room Title: Displays the name of the currently active room */}
+      {/* Room Title */}
       <h2 className="room-title">{activeRoom.name}</h2>
 
-      {/* Room Display: Displays the content of the currently active room */}
+      {/* Room Display */}
       <div className="room-display">
         <div className={`room ${activeRoom.roomType}`}></div>
       </div>
 
-      {/* Media and Decor Buttons: Buttons for interacting with media or decor */}
-      <div className="media-decor-buttons">
-        <button onClick={() => playMedia('Media item')}>
-          <Play size={24} />
-        </button>
-        <button onClick={() => addDecorItem('Decor item')}>
-          <Image size={24} />
-        </button>
-      </div>
+      {/* Media and Decor Buttons - Only shown if user has edit permissions */}
+      {canEdit && (
+        <div className="media-decor-buttons">
+          <button onClick={() => playMedia('Media item')}>
+            <Play size={24} />
+          </button>
+          <button onClick={() => addDecorItem('Decor item')}>
+            <Image size={24} />
+          </button>
+        </div>
+      )}
 
-      {/* Room Navigation: List of buttons to switch between rooms */}
+      {/* Room Navigation */}
       <div className="room-navigation">
         <div className="rooms-list">
-          {/* Render buttons for each room */}
           {rooms.map((room) => (
             <button
               key={room.roomID}
-              onClick={() => loadRoom(room.roomID)} // Change the active room
+              onClick={() => loadRoom(room.roomID)}
               className={`room-button ${activeRoom.roomID === room.roomID ? 'active' : ''}`}
             >
               {room.name}
             </button>
           ))}
         </div>
-        {/* Button to add a new room */}
-        <button onClick={addRoom} className="add-room-button">
-          <Plus size={20} />
-          Add Room
-        </button>
+        {canEdit && (
+          <button onClick={addRoom} className="add-room-button">
+            <Plus size={20} />
+            Add Room
+          </button>
+        )}
       </div>
 
-      {/* Room Settings Modal: Modal that allows the user to change room settings */}
+      {/* Settings Modal */}
       {isSettingsOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            {/* Modal Header: Title and button to close the modal */}
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Room Settings</h2>
               <button onClick={() => setIsSettingsOpen(false)} className="text-gray-500">
@@ -155,23 +174,21 @@ const Room = ({ house }) => {
               </button>
             </div>
 
-            {/* Color Picker: Allows the user to select a primary color for the room */}
             <div className="mb-6">
               <label className="block text-lg font-medium mb-2">Primary Color</label>
               <input
                 type="color"
                 value={primaryColor}
-                onChange={(e) => setPrimaryColor(e.target.value)} // Updates the primary color
+                onChange={(e) => setPrimaryColor(e.target.value)}
                 className="w-full h-12 rounded"
               />
             </div>
 
-            {/* Access Level Selector: Allows the user to select the access level of the room */}
             <div className="mb-6">
               <label className="block text-lg font-medium mb-2">Access Level</label>
               <select
                 value={accessLevel}
-                onChange={(e) => setAccessLevel(e.target.value)} // Updates the access level
+                onChange={(e) => setAccessLevelState(e.target.value)}
                 className="w-full h-12 rounded border-gray-300 focus:ring focus:ring-purple-500 focus:border-purple-500"
               >
                 {Object.values(ACCESS_LEVELS).map((level) => (
@@ -182,16 +199,15 @@ const Room = ({ house }) => {
               </select>
             </div>
 
-            {/* Modal Footer Buttons: Cancel and Save buttons */}
             <div className="flex justify-between gap-4">
               <button
-                onClick={() => setIsSettingsOpen(false)} // Close modal without saving changes
+                onClick={() => setIsSettingsOpen(false)}
                 className="flex-1 py-2 px-4 rounded-lg bg-gray-100 text-gray-900 font-medium"
               >
                 Cancel
               </button>
               <button
-                onClick={handleSaveSettings} // Save settings and close modal
+                onClick={handleSaveSettings}
                 className="flex-1 py-2 px-4 rounded-lg bg-purple-600 text-white font-medium"
               >
                 Save Changes
