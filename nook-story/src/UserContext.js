@@ -28,12 +28,22 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   const login = (username) => {
-    const user = {
-      id: Date.now().toString(),
-      username,
-      friendLevel: FRIEND_LEVELS.OWNER,
-      createdAt: new Date().toISOString(),
-    };
+    // Check if this username already exists in localStorage
+    const existingUsers = JSON.parse(localStorage.getItem('existingUsers') || '[]');
+    let user = existingUsers.find(u => u.username === username);
+    
+    if (!user) {
+      // Only create a new user if username doesn't exist
+      user = {
+        id: Date.now().toString(),
+        username,
+        friendLevel: FRIEND_LEVELS.OWNER,
+        createdAt: new Date().toISOString(),
+      };
+      existingUsers.push(user);
+      localStorage.setItem('existingUsers', JSON.stringify(existingUsers));
+    }
+    
     setCurrentUser(user);
     localStorage.setItem('currentUser', JSON.stringify(user));
   };

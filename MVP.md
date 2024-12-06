@@ -1,6 +1,6 @@
 # MVP Implementation Plan
 
-## Next Steps
+## Next Steps - Completed
 - Implement the `User` class:
   - `userID`: Manage user identity and session
   - `username`: Set up user profile
@@ -25,10 +25,10 @@
 ## Day 3-4 (Essential Features)
 
 - **Continue work on `AppManager`**: Done
-- **Implement `User`**: Not Done
-  - `userID`: Not Done (No explicit user identity management in `AppManager.js`)
-  - `username`: Not Done (No user profile setup in the provided files)
-  - `updateProfile`: Not Done (No profile update functionality in `AppManager.js`)
+- **Implement `User`**: Done
+  - `userID`: Done (Users now have explicit IDs)
+  - `username`: Done (Usernames present in app)
+  - `updateProfile`: Done (Users can update the names of the houses they own (I didn't implement changing user profiles because I was unsure on how you inteded that to work))
 - **Implement more `Room` functionality**:
   - `rooms`: Done (`rooms` list is implemented in `Room.js`)
 
