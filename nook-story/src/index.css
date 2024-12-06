@@ -1,0 +1,275 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8f7fc;
+}
+
+/* Rooms Menu Main Container */
+.rooms-menu {
+  min-height: 100vh;
+  background-color: #f8f7fc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 2rem 1rem;
+}
+
+/* Room Title */
+.room-title {
+  position: absolute;
+  top: 4rem; /* Adjusts placement */
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #1a1a1a;
+  z-index: 2;
+}
+
+/* Room Display Container */
+.room-display {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  margin-top: 2rem; /* Extra space for title */
+}
+
+.room {
+  width: 85%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+  background: linear-gradient(to bottom, #fff, #f0f0f0);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+}
+
+/* Overlay Buttons (Settings) */
+.overlay-buttons {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.overlay-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: none;
+  background-color: #6a5acd;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.overlay-buttons button:hover {
+  background-color: #5848b5;
+}
+
+/* Media and Decor Buttons */
+.media-decor-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.media-decor-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: #6a5acd;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.media-decor-buttons button:hover {
+  background-color: #5848b5;
+  transform: scale(1.1);
+}
+
+/* Room Navigation */
+.room-navigation {
+  display: flex;
+  justify-content: space-between; /* Ensures Add Room button is on the far right */
+  align-items: center;
+  padding: 1rem 2rem;
+  margin-top: auto;
+  background-color: white;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid #eee;
+}
+
+.rooms-list {
+  display: flex;
+  gap: 1rem;
+}
+
+.room-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  background: #f8f9fc;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.room-button.active {
+  background: #6a5acd;
+  color: white;
+  font-weight: 500;
+}
+
+.room-button:hover {
+  background: #eaeafc;
+}
+
+/* Add Room Button */
+.add-room-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  background: #6a5acd;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-room-button:hover {
+  background: #5848b5;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* Fills the entire viewport */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Thin top bar styles */
+.top-menu-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.back-button-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;  /* Adjust spacing between back button and text */
+}
+
+.house-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  transition: color 0.3s ease;
+}
+
+.house-name[style*="cursor: pointer"]:hover {
+  color: #6a5acd;
+}
+
+.house-name::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 2px;
+  background: #6a5acd;
+  transition: width 0.3s ease;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+.house-name[style*="cursor: pointer"]:hover::after {
+  width: 100%;
+}
+
+.settings-button {
+  background: none;
+  border: none;
+  color: #6a5acd;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.settings-button:hover {
+  color: #5848b5;
+}
+
+/* Add these styles to center the image on the screen */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensures the image is vertically centered on the screen */
+}
+
+.centered-image {
+  max-width: 80%; /* Adjust the size of the image */
+  height: auto;
+}
