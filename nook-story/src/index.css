@@ -273,3 +273,412 @@ body {
   max-width: 80%; /* Adjust the size of the image */
   height: auto;
 }
+
+.room-display {
+  width: 100%;
+  height: 500px; /* Adjust based on your layout */
+  position: relative;
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Modal Content */
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease;
+  text-align: center;
+}
+
+.modal-content .modal-header h2 {
+  font-size: 2xl;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.modal-content input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content input[type="color"]:focus {
+  border-color: #000000;
+}
+
+.modal-content select {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content select:focus {
+  border-color: #6a5acd;
+}
+
+.modal-content .choose-file-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background-color: #f8f9fc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content .choose-file-icon:hover {
+  background-color: #eaeafc;
+}
+
+.modal-content button {
+  height: 40px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content .btn-cancel {
+  background-color: #f8f9fc;
+  border: 1px solid #ddd;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.modal-content .btn-cancel:hover {
+  background-color: #eaeafc;
+}
+
+.modal-content .btn-save {
+  background-color: #6a5acd;
+  color: white;
+}
+
+.modal-content .btn-save:hover {
+  background-color: #5848b5;
+}
+
+/* Button and Icon Styles for Modal */
+.modal-content .settings-icon {
+  color: #6a5acd;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-content .settings-icon:hover {
+  color: #5848b5;
+}
+
+/* General button and icon styles for the page */
+.overlay-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  border: none;
+  background-color: #6a5acd;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overlay-buttons button:hover {
+  background-color: #5848b5;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Smaller Action Buttons */
+.modal-content .modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-content .modal-actions button {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-weight: medium;
+}
+
+.modal-content .modal-actions button:first-child {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.modal-content .modal-actions button:last-child {
+  background-color: #6a5acd;
+  color: white;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8f7fc;
+}
+
+/* AppManager Styles */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f7fc;
+  color: black;
+}
+
+.nookhouse-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.nookhouse-menu h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: black;
+}
+
+.nookhouse-menu h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: black;
+}
+
+.bubble-btn {
+  padding: 10px;
+  border-radius: 24px;
+  background-color: black;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.bubble-btn:hover {
+  background-color: #333333;
+  transform: scale(1.05);
+}
+
+/* FriendsList Component */
+.friends-list-container {
+  position: relative;
+}
+
+.friends-list {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 50;
+}
+
+.friends-list h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.friends-list .friend-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.friends-list .friend-item:hover {
+  background-color: #f3f3f3;
+}
+
+.friends-list .add-friend {
+  background-color: black;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.friends-list .add-friend:hover {
+  background-color: #333333;
+}
+
+/* Room Background Image */
+.centered-image {
+  max-width: 70%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  margin-top: 2rem;
+}
+
+/* Friends and User Settings Button */
+.user-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-button:hover {
+  background-color: #333333;
+}
+
+/* Login Modal Styles */
+.login-modal {
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.login-modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+}
+
+.login-modal h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.login-modal input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.login-modal input:focus {
+  outline: none;
+  border-color: #6a5acd;
+  box-shadow: 0 0 8px rgba(106, 90, 205, 0.2);
+}
+
+.login-modal button {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #6a5acd;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-modal button:hover {
+  background-color: #5848b5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-image {
+  cursor: grab;
+  transition: transform 0.2s ease;
+  z-index: 5;
+}
+
+.draggable-image:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+.delete-button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.resize-handle {
+  background-color: #000;
+  cursor: se-resize; /* Shows a diagonal resize cursor */
+  width: 15px;
+  height: 15px;
+}

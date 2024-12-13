@@ -46,10 +46,12 @@ const AppManager = () => {
 
       {!showLogin && currentScreen === 'nookhouse' && (
         <div className="nookhouse-menu p-6 bg-purple-600 min-h-screen flex flex-col justify-center items-center relative">
-        <div className="absolute top-4 right-4">
+    
+          <h1 className="text-4xl font-bold text-black mb-8">Welcome to Nook&Story, {currentUser?.username}!</h1>
+
+          <div className="absolute top-4 right-4">
           <FriendsList />
-        </div>
-          <h1 className="text-4xl font-bold text-white mb-8">Welcome to Nook&Story, {currentUser?.username}!</h1>
+          </div>
 
           {nookHouses.length === 0 ? (
             <div className="text-center">
